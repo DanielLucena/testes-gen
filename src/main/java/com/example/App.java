@@ -11,7 +11,7 @@ public class App
         System.out.println( "Hello World!" );
 
         Conta conta = new Conta();
-        char digito = conta.calculaDigitoVerificador(262634);
+        char digito = Validador.calculaDigitoVerificador(262634);
         System.out.println(digito);
     }
 }

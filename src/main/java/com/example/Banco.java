@@ -19,14 +19,25 @@ public class Banco {
 
     private List<Conta> contas;
 
-    public void addConta(Conta conta){
+    public void addConta(Conta conta) {
+        char digito = conta.getDigitoVerificador();
+        int numeroConta = conta.getNumeroConta();
+        //adicionar verificação de se ja existe outra conta com o mesmo nome de beneficioario
+        
+
+        Validador.validaDigitoVerificador(numeroConta + 1, digito);
+        conta.ativarConta(this);
         this.contas.add(conta);
     }
 
-    public void transferencia(Conta origem, Conta destino, Double valor){
-        if(origem.getSaldo() >= valor){
+    public void transferencia(Conta origem, Conta destino, Double valor) {
+        if (origem.getSaldo() >= valor) {
             origem.setSaldo(origem.getSaldo() - valor);
             destino.setSaldo(destino.getSaldo() + valor);
         }
     }
+
+    // depositar
+
+    // sacar
 }

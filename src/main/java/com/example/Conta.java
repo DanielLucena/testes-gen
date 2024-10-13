@@ -1,7 +1,6 @@
 package com.example;
 
-import java.util.Arrays;
-import java.util.stream.Stream;
+import java.util.Random;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -22,34 +21,33 @@ public class Conta {
 
     private Double saldo;
 
+    private boolean isAtiva;
+
     private int numeroConta;
 
     private char digitoVerificador;
 
+    // string senha 6 numeros
 
-    /**
-     * Says hello to the world.
-     * @param numeroConta numero da conta para ser validado.
-     * @see https://www.creditas.com/exponencial/digito-da-conta-o-que-e-para-que-serve-e-como-encontra-lo/
-     */
-    public char calculaDigitoVerificador(int numeroConta) {
-        Integer[] digitosConta = new Integer[8];
-        Arrays.fill(digitosConta, 0);
-        int[] multiplicadores = {2,3,4,5,6,7,8,9};
-        String numeroContaAsString = new StringBuilder(
-                String.valueOf(numeroConta))
-                .reverse().toString();
+    // adicionar criterio de validação salvando senha criptografada com salt no numero da conta
 
-        for (int i = 0; i < numeroContaAsString.length(); i++) {
-            char c = numeroContaAsString.charAt(i);
-            digitosConta[i] = (Integer) (Character.getNumericValue(c) * multiplicadores[i]);
-        }
+    public Conta(String beneficiario) {
+        this.isAtiva = false;
+        this.beneficiario = beneficiario;
+        this.id = (long) Validador.getIdIncremental();
+        this.saldo = .0;
 
-        int somaDigitos = Stream.of(digitosConta).reduce(0, Integer::sum);
-        int restoDivisao = somaDigitos % 11;
-        if(restoDivisao < 10){
-            return Character.forDigit(restoDivisao, 10);
-        }
-        return 'X';
+        Random random = new Random();
+        this.numeroConta = 10000000 + random.nextInt(90000000);
     }
+
+    public void setDigitoVerificador() {
+        this.digitoVerificador = Validador.calculaDigitoVerificador(numeroConta);
+    }
+
+    public void ativarConta(Banco banco) {
+        this.banco = banco;
+        this.isAtiva = true;
+    }
+
 }
