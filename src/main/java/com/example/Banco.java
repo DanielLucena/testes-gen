@@ -38,6 +38,7 @@ public class Banco {
     // transferencia
     public void transferencia(Conta origem, Conta destino, Double valor, String senha) {
         validaAcessoConta(origem, senha);
+        Validador.validaIsContaAtiva(destino);
         Validador.validarSaldoSuficiente(origem, valor);
 
         origem.sacarValor(valor);
