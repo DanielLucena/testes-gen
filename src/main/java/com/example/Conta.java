@@ -4,7 +4,6 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
@@ -29,20 +28,9 @@ public class Conta {
 
     private char digitoVerificador;
 
-    // string senha 6 numeros
-
-    // adicionar criterio de validação salvando senha criptografada com salt no
-    // numero da conta
-
     public Conta(String beneficiario, String senha) {
-        // try {
         Validador.validaCriacaoSenha(senha);
-        // } catch (ValidadtionErrorException e) {
-        // System.out.println("Não foi possivel criar a conta");
-        // System.err.println(e);
-        // return;
-        // }
-
+    
         this.isAtiva = false;
         this.beneficiario = beneficiario;
         this.id = (long) Validador.getIdIncremental();
