@@ -1,11 +1,12 @@
 package com.example;
 
-import java.util.Random;
-
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Data
 @AllArgsConstructor
@@ -19,6 +20,7 @@ public class Conta {
 
     private Banco banco;
 
+    @Setter(AccessLevel.PRIVATE)
     private Double saldo;
 
     private boolean isAtiva;
@@ -29,16 +31,27 @@ public class Conta {
 
     // string senha 6 numeros
 
-    // adicionar criterio de validação salvando senha criptografada com salt no numero da conta
+    // adicionar criterio de validação salvando senha criptografada com salt no
+    // numero da conta
 
-    public Conta(String beneficiario) {
+    public Conta(String beneficiario, String senha) {
+        // try {
+        Validador.validaCriacaoSenha(senha);
+        // } catch (ValidadtionErrorException e) {
+        // System.out.println("Não foi possivel criar a conta");
+        // System.err.println(e);
+        // return;
+        // }
+
         this.isAtiva = false;
         this.beneficiario = beneficiario;
         this.id = (long) Validador.getIdIncremental();
         this.saldo = .0;
 
-        Random random = new Random();
-        this.numeroConta = 10000000 + random.nextInt(90000000);
+        this.numeroConta = Validador.geraNumeroConta(beneficiario, senha, this.id.longValue());
+        this.digitoVerificador = Validador.calculaDigitoVerificador(this.numeroConta);
+
+        System.out.println("conta criada: " + numeroConta + "-" + digitoVerificador);
     }
 
     public void setDigitoVerificador() {
@@ -48,6 +61,14 @@ public class Conta {
     public void ativarConta(Banco banco) {
         this.banco = banco;
         this.isAtiva = true;
+    }
+
+    public void depositarValor(Double valor) {
+        this.saldo += valor;
+    }
+
+    public void sacarValor(Double valor) {
+        this.saldo -= valor;
     }
 
 }
