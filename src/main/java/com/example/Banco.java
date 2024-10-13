@@ -1,5 +1,6 @@
 package com.example;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import lombok.AllArgsConstructor;
@@ -19,25 +20,56 @@ public class Banco {
 
     private List<Conta> contas;
 
+    public Banco(long id, String nome) {
+        this.id = id;
+        this.nome = nome;
+        this.contas = new ArrayList<Conta>();
+    }
+
     public void addConta(Conta conta) {
         char digito = conta.getDigitoVerificador();
         int numeroConta = conta.getNumeroConta();
-        //adicionar verificação de se ja existe outra conta com o mesmo nome de beneficioario
-        
 
-        Validador.validaDigitoVerificador(numeroConta + 1, digito);
+        Validador.validaDigitoVerificador(numeroConta, digito);
         conta.ativarConta(this);
         this.contas.add(conta);
     }
 
-    public void transferencia(Conta origem, Conta destino, Double valor) {
-        if (origem.getSaldo() >= valor) {
-            origem.setSaldo(origem.getSaldo() - valor);
-            destino.setSaldo(destino.getSaldo() + valor);
-        }
+    // transferencia
+    public void transferencia(Conta origem, Conta destino, Double valor, String senha) {
+        validaAcessoConta(origem, senha);
+        Validador.validarSaldoSuficiente(origem, valor);
+
+        origem.sacarValor(valor);
+        destino.depositarValor(valor);
+
     }
 
     // depositar
+    public void depositar(Conta conta, Double valor, String senha) {
+        validaAcessoConta(conta, senha);
+        conta.depositarValor(valor);
+    }
 
     // sacar
+    public void sacar(Conta conta, Double valor, String senha) {
+        validaAcessoConta(conta, senha);
+        Validador.validarSaldoSuficiente(conta, valor);
+        conta.sacarValor(valor);
+    }
+
+    private void validaAcessoConta(Conta conta, String senha) {
+        Validador.validaIsContaAtiva(conta);
+        Validador.validaSenhaConta(conta, senha);
+    }
+
+    public Conta getConta(int numeroConta, char digitoVerificador) {
+        Validador.validaDigitoVerificador(numeroConta, digitoVerificador);
+        for (Conta conta : contas) {
+            if (conta.getNumeroConta() == numeroConta) {
+                return conta;
+            }
+        }
+        return null;
+    }
 }
