@@ -61,7 +61,7 @@ public class Validador {
 
     public static void validaIsContaAtiva(Conta conta) {
         if (!conta.isAtiva()) {
-            throw new ValidadtionErrorException("essa conta nõo está ativa");
+            throw new ValidadtionErrorException("essa conta não está ativa");
         }
     }
 
