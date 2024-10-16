@@ -1,15 +1,11 @@
 package com.example;
 
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
 @EqualsAndHashCode
 public class Conta {
 
@@ -30,7 +26,7 @@ public class Conta {
 
     public Conta(String beneficiario, String senha) {
         Validador.validaCriacaoSenha(senha);
-    
+
         this.isAtiva = false;
         this.beneficiario = beneficiario;
         this.id = (long) Validador.getIdIncremental();

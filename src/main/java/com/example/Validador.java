@@ -74,10 +74,16 @@ public class Validador {
         }
     }
 
-    public static int geraNumeroConta(String beneficiario, String senha, long id) {
-
+    public static int geraNumeroConta(String beneficiario, String senha, Long id) {
+        validaCriacaoSenha(senha);
+        if (beneficiario == null || beneficiario.compareTo("") == 0)
+            throw new ValidadtionErrorException("o beneficiario não pode ser nulo ou vazio");
+        if (senha == null || senha.compareTo("") == 0)
+            throw new ValidadtionErrorException("a senha não pode ser nula ou vazia");
+        if (id < 1)
+            throw new ValidadtionErrorException("o id não pode ser menor que 1");
         // Concatenar as entradas
-        String concatenatedInput = beneficiario + senha + id;
+        String concatenatedInput = "string minima" + beneficiario + senha + id;
 
         // Aplica o algoritmo de hash ao input concatenado
         byte[] hashBytes = digest.digest(concatenatedInput.getBytes());
